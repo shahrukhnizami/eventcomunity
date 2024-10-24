@@ -1,10 +1,16 @@
+import CategoriesTable from "@/components/CategoriesTable";
+import { Button } from "@/components/ui/button";
 
 
 export default function Categories() {
     return (
-      <div className="min-h-screen">
-       <h1 className="text-3xl font-bold text-center p-20">Well Come Categories</h1>
+      <div className="min-h-screen mx-10">
+      <div className="flex justify-between items-center my-4">
+        <h1 className="font-bold text-xl text-center">Categories</h1>
+        <Button>Add Category</Button>
       </div>
+     <CategoriesTable/>
+    </div>
     );
   }
   

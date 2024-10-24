@@ -1,9 +1,16 @@
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import Link from "next/link";
 
 export default function layout({children}){
 return(
-    <html>
+  <html lang="en">
+        <meta charSet="utf-8" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no"
+        />
+        <meta name="theme-color" content="#000000" />
         <body>
             
         <Tabs defaultValue="dashboard" className="w-full">
