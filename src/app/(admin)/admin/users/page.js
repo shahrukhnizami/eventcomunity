@@ -9,7 +9,7 @@ export default function Users() {
       <div className="min-h-screen mx-10">
         <div className="flex justify-between items-center my-4">
         <h1 className="font-bold text-xl">Users</h1>
-        <Button>Add User</Button>
+        <Button variant="outline">Add User</Button>
       </div>
       <UsersTable/>
     </div>

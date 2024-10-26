@@ -7,7 +7,7 @@ export default function Categories() {
       <div className="min-h-screen mx-10">
       <div className="flex justify-between items-center my-4">
         <h1 className="font-bold text-xl text-center">Categories</h1>
-        <Button>Add Category</Button>
+        <Button variant="outline">Add Category</Button>
       </div>
      <CategoriesTable/>
     </div>
