@@ -10,14 +10,33 @@ import {
   import Image from "next/image";
 
 
-export default async function UsersTable(){
-    
-
-
-      let res = await fetch("http://localhost:3000/api/users");
-      res = await res.json()
-      
-      
+export default function UsersTable(){
+    const users = [
+        {
+          fullname: "Bilal Raza",
+          email: "attari1235@gmail.com",
+          location: "Karachi",
+          profileImage:
+            "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YXZhdGFyfGVufDB8fDB8fHwwÇ",
+          events: 5,
+        },
+        {
+          fullname: "Ahmed Raza",
+          email: "raza@gmail.com",
+          location: "Karachi",
+          profileImage:
+            "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YXZhdGFyfGVufDB8fDB8fHwwÇ",
+          events: 5,
+        },
+        {
+          fullname: "Asad Raza",
+          email: "asad@gmail.com",
+          location: "Karachi",
+          profileImage:
+            "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YXZhdGFyfGVufDB8fDB8fHwwÇ",
+          events: 5,
+        },
+      ];
     return(
         <Table>
         <TableCaption>A list of your recent users.</TableCaption>
@@ -26,32 +45,29 @@ export default async function UsersTable(){
             <TableHead>Profile Image</TableHead>
             <TableHead className="w-[100px]">Fullname</TableHead>
             <TableHead>Email</TableHead>
-            <TableHead>Address</TableHead>
+            <TableHead>Location</TableHead>
             <TableHead >Events</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {res.users?.map((user) => (
+          {users.map((user) => (
             <TableRow key={user.fullname}>
               <TableCell className="text-right">
-                {/* <Image
+                <Image
                   src={user.profileImage}
                   style={{ objectFit: "cover" }}
                   height={40}
                   width={40}
                   alt={user.profileImage}
-                /> */}
+                />
               </TableCell>
               <TableCell className="font-medium">{user.fullname}</TableCell>
               <TableCell>{user.email}</TableCell>
-              <TableCell>{user.address}</TableCell>
+              <TableCell>{user.location}</TableCell>
               <TableCell>{user.events}</TableCell>
             </TableRow>
           ))}
         </TableBody>
-      </Table>
-      
-  
-    )
+      </Table>)
     
 }
