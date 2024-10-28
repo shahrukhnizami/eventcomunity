@@ -1,31 +1,28 @@
-
-import { connectDB } from "@/lib/db/connectionDB.js";
+import { connectDB } from "@/lib/db/connectionDB";
 import { CategoryModal } from "@/lib/models/Category";
 
 export async function GET(request) {
-  try{await connectDB();
+  await connectDB();
   const categories = await CategoryModal.find();
   return Response.json(
     {
-      msg: "categories Fetched Successfully",
-      categories
+      msg: "Categories Fetched Successfully",
+      categories,
     },
     { status: 200 }
-  );}
-  catch(error){console.log(error);
-  }
+  );
 }
 
 export async function POST(request) {
   await connectDB();
   const obj = await request.json();
-  let newcategory = new CategoryModal(obj);
-  await newcategory.save();
+  let newCategory = new CategoryModal(obj);
+  await newCategory.save();
 
   return Response.json(
     {
       msg: "Category Added Successfully ",
-      Categories: newcategory
+      category: newCategory,
     },
     { status: 201 }
   );
