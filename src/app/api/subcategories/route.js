@@ -1,5 +1,6 @@
 import { connectDB } from "@/lib/db/connectionDB";
 import { SubCategoryModal } from "@/lib/models/Subcategories";
+import { CategoryModal } from "@/lib/models/Category";
 
 export async function GET(request) {
     await connectDB();
@@ -11,8 +12,7 @@ export async function GET(request) {
     }
   
     const subCategories = await SubCategoryModal.find(query).populate(
-      "category",
-      "title"
+      "category","title"
     );
     return Response.json(
       {
