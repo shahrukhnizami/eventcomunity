@@ -17,6 +17,7 @@ export default async function Home() {
             <Image src={session.user?.image}
                 height={30}
                 width={30}
+                alt={session?.user?.name}
                 className="rounded-full" />
             <h1 className="font-bold">{session?.user?.email}
           </h1>

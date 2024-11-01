@@ -16,6 +16,7 @@ console.log("session",session);
                 <Image src={session.user?.image}
                 height={100}
                 width={100}
+                alt={session?.user?.name}
                 className="rounded-full" />
                 <h1 className="font-bold py-3">{session?.user?.name}</h1>
                 <h1 className="py-2">{session.user?.email}</h1>
