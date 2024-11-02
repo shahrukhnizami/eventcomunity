@@ -1,9 +1,7 @@
 
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+
 import Image from "next/image";
 import { auth, signIn, signOut } from "../../auth";
-import Signin from "./signin/page";
 
 export default async function Home() {
   const session = await auth()
