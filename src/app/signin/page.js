@@ -9,6 +9,7 @@ console.log("session",session);
 
     return (
     <div className="flex items-center container mx-auto justify-center min-h-screen">
+       
         {
             session?
             <div className="flex flex-col rounded">
@@ -30,11 +31,13 @@ console.log("session",session);
               </form>
                 </div>:
                 <form
+                
                 action={async () => {
                   "use server"
                   await signIn("google")
                 }}
               >
+                 <h1>ppppp</h1>
                 <button type="submit">Signin with Google</button>
               </form>
         }

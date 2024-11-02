@@ -1,19 +1,25 @@
+
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
 import { auth, signIn, signOut } from "../../auth";
+import Signin from "./signin/page";
 
 export default async function Home() {
   const session = await auth()
   return (
 
 
-<div className="min-h-screen ">
-    <div className="flex justify-around items-center my-4">
-        <h1 className="font-bold text-3xl text-center">Wellcome Event Comunity</h1>
+<div className=" ">
+    <div className="py-2 items-center my-4">
+      <div>
+      <h1 className="font-bold text-3xl text-center">Wellcome Event Comunity</h1>
+      </div>
+       
         {
           session?
-          <div className="flex gap-5">
+          
+          <div className="container mx-auto flex gap-4 justify-end items-end">
             <Image src={session.user?.image}
                 height={30}
                 width={30}
@@ -29,17 +35,47 @@ export default async function Home() {
         >
           <button type="submit">Sign Out</button>
         </form>
-          </div>:
-          <div className="text-right py-2">
+        </div>
+        
+          
+          :
+          <div className="container py-4 mx-auto flex flex-col gap-4 justify-right items-center">
            <form
+        className="flex flex-col gap-3 shadow p-3"
+        action={async (formData) => {
+          "use server";
+          await signIn("credentials", formData, { redirect: false });
+        }}
+      >
+        <h1 className="py-4 text-red-500">Please Login your Account!!</h1>
+        <input
+          className="border p-2"
+          required
+          name="email"
+          placeholder="Enter your Email"
+        />
+        <input
+          className="border p-2"
+          required
+          name="password"
+          placeholder="Enter your Password"
+        />
+        <button className="border p-1 px-2" type="submit">
+          Login
+        </button>
+      </form>
+           <form 
                 action={async () => {
                   "use server"
                   await signIn("google")
                 }}
               >
-                <button type="submit">Signin with Google</button>
+                
+                 
+                <button className="border font-bold w-60"  type="submit">Continue with Google</button>
               </form>
           </div>
+          
          
         }
       </div>

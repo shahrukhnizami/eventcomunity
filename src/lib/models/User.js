@@ -1,18 +1,19 @@
 import mongoose from "mongoose";
 const { Schema } = mongoose;
 
-const userSchema = new Schema({
-  fullname: String,
-  email: String,
-  password: String,
-  location: {
-    lat: Number,
-    long: Number,
+const userSchema = new Schema(
+  {
+    fullname: String,
+    email: { type: String, required: true },
+    provider: { type: String },
+    profileImg: { type: String },
+    password: { type: String },
+    role: { type: String, default: "user" },
+    gender: String,
+    address: String,
   },
-  profileImg: String,
-  address: String,
-  bio: String,
-});
+  { timestamps: true }
+);
 
 export const UserModal =
-  mongoose.models.User || mongoose.model("User", userSchema);
+  mongoose.models.Users || mongoose.model("Users", userSchema);
