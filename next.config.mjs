@@ -15,6 +15,10 @@ const nextConfig = {
         {
           hostname: "media.istockphoto.com"
         }
+        ,
+        {
+          hostname: "plus.unsplash.com"
+        }
 
       ],
     },
