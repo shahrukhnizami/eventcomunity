@@ -1,3 +1,4 @@
+"use client";
 import {
   Table,
   TableBody,
@@ -8,17 +9,16 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Image from "next/image";
-import { getCategories } from "@/actions/categories";
 import { getSubCategories } from "@/actions/subcategories";
 
+export default async function SubCategoriesTable({searchParams }) {
+  const subCategories = await getSubCategories(searchParams?.category);
+  console.log("subCategories",subCategories);
+  
+  
 
-
-
-export default async function SubCategoriesTable(searchParams){
-  const subcategories = await getSubCategories(searchParams?.category);
- 
-    return(
-      <Table>
+  return (
+    <Table>
       <TableCaption>A list of your subcategories.</TableCaption>
       <TableHeader>
         <TableRow>
@@ -29,8 +29,9 @@ export default async function SubCategoriesTable(searchParams){
         </TableRow>
       </TableHeader>
       <TableBody>
-          {subcategories?.subCategories?.map((subCat) => (
-            <TableRow key={subCat.title}>
+        {subCategories?.subCategories?.length > 0 ? (
+          subCategories.subCategories.map((subCat) => (
+            <TableRow key={subCat.id || subCat.title}>
               <TableCell className="text-right">
                 <Image
                   src={subCat.thumbnail}
@@ -48,8 +49,15 @@ export default async function SubCategoriesTable(searchParams){
                 {subCat.description}
               </TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-    </Table>)
-    
+          ))
+        ) : (
+          <TableRow>
+            <TableCell colSpan="4" className="text-center">
+              No subcategories found.
+            </TableCell>
+          </TableRow>
+        )}
+      </TableBody>
+    </Table>
+  );
 }
