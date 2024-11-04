@@ -4,6 +4,7 @@ import Google from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
 import { connectDB } from "@/lib/db/connectionDB";
 import { UserModal } from "@/lib/models/User";
+import { redirect } from "next/dist/server/api-utils";
 
 const handleLoginUser = async (profile) => {
   await connectDB();
@@ -33,7 +34,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
       authorize: async (credentials) => {
         let user = null;
-        console.log("credentials=>", credentials);
+
+      
+        console.log("credentials=>", credentials );
 
         let res = await fetch(
           `https://eventcomunity.vercel.app/api/user/login`,

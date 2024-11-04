@@ -42,7 +42,7 @@ export default async function Home() {
         className="flex flex-col gap-3 shadow p-3"
         action={async (formData) => {
           "use server";
-          await signIn("credentials", formData, { redirect: false });
+          await signIn("credentials", formData,{redirect:false});
         }}
       >
         <h1 className="py-4 text-red-500">Please Login your Account!!</h1>

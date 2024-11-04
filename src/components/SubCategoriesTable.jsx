@@ -8,34 +8,15 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Image from "next/image";
+import { getCategories } from "@/actions/categories";
+import { getSubCategories } from "@/actions/subcategories";
 
 
 
 
-export default function SubCategoriesTable(){
-  const subcategories = [
-    {
-      title: "Cricket",
-      category: "Sports",
-      thumbnail:
-        "https://images.unsplash.com/photo-1470920456752-d50214d7ed59?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8Y3ljbGluZ3xlbnwwfHwwfHx8MA%3D%3D",
-      description: "All Community Members will be have cycling Race",
-    },
-    {
-      title: "Footbal",
-      category: "Sports",
-      thumbnail:
-        "https://images.unsplash.com/photo-1470920456752-d50214d7ed59?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8Y3ljbGluZ3xlbnwwfHwwfHx8MA%3D%3D",
-      description: "All Community Members will be have cycling Race",
-    },
-    {
-      title: "Tennis",
-      category: "Sports",
-      thumbnail:
-        "https://images.unsplash.com/photo-1470920456752-d50214d7ed59?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8Y3ljbGluZ3xlbnwwfHwwfHx8MA%3D%3D",
-      description: "All Community Members will be have cycling Race",
-    },
-  ];
+export default async function SubCategoriesTable(searchParams){
+  const subcategories = await getSubCategories(searchParams?.category);
+ 
     return(
       <Table>
       <TableCaption>A list of your subcategories.</TableCaption>
@@ -48,25 +29,27 @@ export default function SubCategoriesTable(){
         </TableRow>
       </TableHeader>
       <TableBody>
-        {subcategories.map((category) => (
-          <TableRow key={category.title}>
-            <TableCell className="text-right">
-              <Image
-                src={category.thumbnail}
-                style={{ objectFit: "cover" }}
-                height={40}
-                width={40}
-                alt={category.title}
-              />
-            </TableCell>
-            <TableCell className="font-medium">{category.category}</TableCell>
-            <TableCell className="font-medium">{category.title}</TableCell>
-            <TableCell className="font-medium">
-              {category.description}
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
+          {subcategories?.subCategories?.map((subCat) => (
+            <TableRow key={subCat.title}>
+              <TableCell className="text-right">
+                <Image
+                  src={subCat.thumbnail}
+                  style={{ objectFit: "cover" }}
+                  height={40}
+                  width={40}
+                  alt={subCat.title}
+                />
+              </TableCell>
+              <TableCell className="font-medium">
+                {subCat.category?.title}
+              </TableCell>
+              <TableCell className="font-medium">{subCat.title}</TableCell>
+              <TableCell className="font-medium">
+                {subCat.description}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
     </Table>)
     
 }
