@@ -1,4 +1,3 @@
-
 import { getCategories } from "@/actions/categories";
 import { getSubCategories } from "@/actions/subcategories";
 import CategoryDropdown from "@/components/CategoryDropdown/CategoryDropdown";
@@ -11,23 +10,46 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
 import Image from "next/image";
 
+const SearchParams = {
+  category:"",
+};
 
+const Category = {
+  id:"",
+  title: "string"
+};
 
-export default async function SubCategories({ searchParams }) {
-  console.log("searchParams=>", searchParams);
+const SubCategory = {
+  id: "",
+  title: "",
+  description: "",
+  thumbnail: "",
+  category: Category,
+};
 
-  const subcategories = await getSubCategories(searchParams?.category);
-  const categories = (await getCategories()).categories;
+export default async function SubCategories({
+  searchParams,
+}) {
+  const params = await searchParams;
+  console.log("searchParams=>", params);
+
+  const [subcategoriesData, categoriesData] = await Promise.all([
+    getSubCategories(params.category),
+    getCategories(),
+  ]);
+
+  const subcategories = subcategoriesData.subCategories || [];
+  const categories = categoriesData.categories || [];
+
   return (
     <div className="min-h-screen mx-10 px-1">
       <div className="flex justify-between items-center my-4">
         <h1 className="font-bold text-xl">SubCategories</h1>
         <div className="flex gap-3">
           <CategoryDropdown categories={categories} />
-          {/* <AddSubCategory categories = {categories} /> */}
+          {/* <AddSubCategory categories={categories} /> */}
         </div>
       </div>
 
@@ -42,15 +64,15 @@ export default async function SubCategories({ searchParams }) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {subcategories?.subCategories?.map((subCat) => (
-            <TableRow key={subCat.title}>
+          {subcategories.map((subCat) => (
+            <TableRow key={subCat.id}>
               <TableCell className="text-right">
                 <Image
                   src={subCat.thumbnail}
                   style={{ objectFit: "cover" }}
                   height={40}
                   width={40}
-                  alt={subCat.title}
+                  alt={`Thumbnail for ${subCat.title}`}
                 />
               </TableCell>
               <TableCell className="font-medium">
