@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { auth, signIn, signOut } from "../../auth";
-import { Link } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default async function Home() {
@@ -14,9 +13,9 @@ export default async function Home() {
     <div className="py-2 items-center my-4">
      
       <h1 className="font-bold text-3xl text-center">Wellcome Event Comunity</h1>
-      <Link href={"/signin"}>
+      
     <Button>Signin</Button>
-  </Link>
+
        
         
                 
