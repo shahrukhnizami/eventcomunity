@@ -1,5 +1,6 @@
 import { getCategories } from "@/actions/categories";
 import { getSubCategories } from "@/actions/subcategories";
+import { AddSubCategory } from "@/components/AddSubCategory/AddSubCategory";
 import CategoryDropdown from "@/components/CategoryDropdown/CategoryDropdown";
 import {
   Table,
@@ -49,7 +50,7 @@ export default async function SubCategories({
         <h1 className="font-bold text-xl">SubCategories</h1>
         <div className="flex gap-3">
           <CategoryDropdown categories={categories} />
-          {/* <AddSubCategory categories={categories} /> */}
+          <AddSubCategory categories={categories} />
         </div>
       </div>
 
@@ -65,7 +66,7 @@ export default async function SubCategories({
         </TableHeader>
         <TableBody>
           {subcategories.map((subCat) => (
-            <TableRow key={subCat.id}>
+            <TableRow key={subCat._id}>
               <TableCell className="text-right">
                 <Image
                   src={subCat.thumbnail}
