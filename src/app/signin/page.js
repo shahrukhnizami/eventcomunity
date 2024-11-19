@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { auth, signIn } from "../../../auth";
+import { revalidatePath } from "next/cache";
 
 export default async function SignIn() {
   const session = await auth();
@@ -14,7 +15,10 @@ export default async function SignIn() {
         action={async () => {
           "use server";
           await signIn("google");
-        }}
+          
+        }
+        
+      }
       >
         <button type="submit">Signin with Google</button>
       </form>

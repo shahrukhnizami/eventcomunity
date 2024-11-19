@@ -14,7 +14,7 @@ export default async function Home() {
      
       <h1 className="font-bold text-3xl text-center">Wellcome Event Comunity</h1>
       
-    <Button>Signin</Button>
+    
 
        
         

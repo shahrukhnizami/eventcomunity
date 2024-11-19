@@ -66,7 +66,7 @@ export default async function SubCategories({
         </TableHeader>
         <TableBody>
           {subcategories.map((subCat) => (
-            <TableRow key={subCat._id}>
+             <TableRow key={subCat._id || subCat.title}>
               <TableCell className="text-right">
                 <Image
                   src={subCat.thumbnail}
