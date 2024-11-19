@@ -31,7 +31,7 @@ export default async function SubCategoriesTable({searchParams }) {
       <TableBody>
         {subCategories?.subCategories?.length > 0 ? (
           subCategories.subCategories.map((subCat) => (
-            <TableRow key={subCat._id || subCat.title}>
+            <TableRow key={subCat._id}>
               <TableCell className="text-right">
                 <Image
                   src={subCat.thumbnail}
