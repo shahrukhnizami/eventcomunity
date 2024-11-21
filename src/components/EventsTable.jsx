@@ -1,3 +1,4 @@
+import { getEvents } from "@/actions/events";
 import {
   Table,
   TableBody,
@@ -12,25 +13,8 @@ import Image from "next/image";
 
 
 
-export default function EvevtsTable(){
-  const events = [
-    {
-      title: "Birthday Event",
-      description: "Birthday of Baby Girl",
-      location: "Karachi",
-      thumbnail:
-        "https://images.unsplash.com/flagged/photo-1553056011-7811272649cb?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YmlydGhkYXklMjBiYWJ5JTIwZ2lybHxlbnwwfHwwfHx8MA%3D%3D",
-      date: new Date().toLocaleDateString(),
-    },
-    {
-      title: "Cycling Marathon",
-      description: "All Community Members will be have cycling Race",
-      location: "Karachi",
-      thumbnail:
-        "https://images.unsplash.com/photo-1470920456752-d50214d7ed59?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8Y3ljbGluZ3xlbnwwfHwwfHx8MA%3D%3D",
-      date: new Date().toLocaleDateString(),
-    },
-  ];
+export default async function EvevtsTable(){
+ const events = await getEvents()
     return(
       <Table>
       <TableCaption>A list of your recent events.</TableCaption>
@@ -39,13 +23,14 @@ export default function EvevtsTable(){
           <TableHead>Thumbnail</TableHead>
           <TableHead className="w-[100px]">Title</TableHead>
           <TableHead>Description</TableHead>
-          <TableHead>Location</TableHead>
-          <TableHead className="text-right">Date</TableHead>
+          <TableHead>Address</TableHead>
+          <TableHead className="text-right">Start Date</TableHead>
+          <TableHead className="text-right">End Date</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {events.map((event) => (
-          <TableRow key={event.title}>
+        {events?.events?.map((event) => (
+          <TableRow key={event._id}>
             <TableCell className="text-right">
               <Image
                 src={event.thumbnail}
@@ -57,8 +42,9 @@ export default function EvevtsTable(){
             </TableCell>
             <TableCell className="font-medium">{event.title}</TableCell>
             <TableCell>{event.description}</TableCell>
-            <TableCell>{event.location}</TableCell>
-            <TableCell>{event.date}</TableCell>
+            <TableCell>{event.address}</TableCell>
+            <TableCell>{event.startDate}</TableCell>
+            <TableCell>{event.endDate}</TableCell>
           </TableRow>
         ))}
       </TableBody>
