@@ -1,190 +1,259 @@
-'use client'
+"use client";
+
+import { useState } from "react";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
 import {
-    Sheet,
-    SheetContent,
-    SheetDescription,
-    SheetHeader,
-    SheetTitle,
-    SheetTrigger,
-  } from "@/components/ui/sheet"
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+// import { Autocomplete } from "@react-google-maps/api";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
 
+} from "@/components/ui/sheet";
+import { addEvents } from "@/actions/events";
+import { useToast } from "@/hooks/use-toast";
 
+// Replace with your actual Google Maps API key
+const GOOGLE_MAPS_API_KEY = process.env.GOOGLE_MAP_API_KEY;
 
+const schema = z.object({
+  title: z.string().min(1, "Title is required"),
+  description: z.string().min(1, "Description is required"),
+  startTime: z.string().min(1, "Start time is required"),
+  endTime: z.string().min(1, "End time is required"),
+  thumbnail: z.string().url("Invalid URL for thumbnail"),
+  startDate: z.string().min(1, "Start date is required"),
+  endDate: z.string().min(1, "End date is required"),
+  category: z.string(),
+  lat: z.string(),
+  long: z.string(),
+  address: z.string().min(1, "Address is required"),
+  // Note: createdBy, category, subcategory, and going are not included in the form
+  // as they would typically be handled on the server side or through a separate interface
+});
 
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
-  
-import { Button } from "../ui/button"
-import { useState } from "react"
-export default function AddEventSheet(){
-  const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    startTime: '',
-    endTime: '',
-    startDate: '',
-    endDate: '',
-    lat: '',
-    long: '',
-    address: '',
-  })
+export default function AddEventForm({ session, categories }) {
+  const { toast } = useToast();
 
-  const handleChange = (e) => {
-    const { name, value } = e.target
-    setFormData(prevData => ({
-      ...prevData,
-      [name]: value
-    }))
-  }
+  const [isOpen, setIsOpen] = useState(false);
+  const [mapCenter, setMapCenter] = useState({ lat: 0, lng: 0 });
+  const {
+    control,
+    handleSubmit,
+    setValue,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      title: "",
+      description: "",
+      startTime: "",
+      endTime: "",
+      thumbnail: "",
+      startDate: "",
+      endDate: "",
+      lat: 0,
+      long: 0,
+      address: "",
+      category: "",
+    },
+  });
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    // Here you would typically send the data to your backend
-    console.log('Form submitted:', formData)
-    // Reset form after submission
-    setFormData({
-      title: '',
-      description: '',
-      startTime: '',
-      endTime: '',
-      startDate: '',
-      endDate: '',
-      lat: '',
-      long: '',
-      address: '',
-    })
-    
-  }
-    return(
-      <Sheet>
-      <SheetTrigger>Add Event</SheetTrigger>
-      <SheetContent>
+  const onSubmit = async (defaultValues) => {
+    console.log(defaultValues);
+
+    const obj = { ...defaultValues };
+    obj.location = {
+      lat: +obj.lat,
+      long: +obj.long,
+    };
+    obj.createdBy = session.user._id;
+    await addEvents(obj);
+    reset();
+    // Here you would typically send the data to your server
+    setIsOpen(false);
+    toast({
+      title: "Event added successfully",
+    });
+  };
+
+  return (
+    <Sheet open={isOpen} onOpenChange={setIsOpen}>
+      <SheetTrigger asChild>
+        <Button variant="outline">Add Event</Button>
+      </SheetTrigger>
+      <SheetContent className="w-[400px] sm:w-[540px] overflow-y-auto">
         <SheetHeader>
-          <SheetTitle>Are you absolutely sure?</SheetTitle>
+          <SheetTitle>Add New Event</SheetTitle>
           <SheetDescription>
-          <Card className="w-full max-w-2xl mx-auto">
-      <CardHeader>
-        <CardTitle>Add New Event</CardTitle>
-        <CardDescription>Fill in the details to create a new event.</CardDescription>
-      </CardHeader>
-      <form  onSubmit={handleSubmit} >
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="title">Title</Label>
-            <Input
-              id="title"
-              name="title"
-              value={formData.title}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="description">Description</Label>
-            <Textarea
-              id="description"
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="startDate">Start Date</Label>
-              <Input
-                id="startDate"
-                name="startDate"
-                type="date"
-                value={formData.startDate}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="startTime">Start Time</Label>
-              <Input
-                id="startTime"
-                name="startTime"
-                type="time"
-                value={formData.startTime}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="endDate">End Date</Label>
-              <Input
-                id="endDate"
-                name="endDate"
-                type="date"
-                value={formData.endDate}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="endTime">End Time</Label>
-              <Input
-                id="endTime"
-                name="endTime"
-                type="time"
-                value={formData.endTime}
-                onChange={handleChange}
-                required
-              />
-            </div>
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="address">Address</Label>
-            <Input
-              id="address"
-              name="address"
-              value={formData.address}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="lat">Latitude</Label>
-              <Input
-                id="lat"
-                name="lat"
-                type="number"
-                step="any"
-                value={formData.lat}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="long">Longitude</Label>
-              <Input
-                id="long"
-                name="long"
-                type="number"
-                step="any"
-                value={formData.long}
-                onChange={handleChange}
-                required
-              />
-            </div>
-          </div>
-        </CardContent>
-        <CardFooter>
-          <Button type="submit" className="w-full">Create Event</Button>
-        </CardFooter>
-      </form>
-    </Card>
+            Fill in the details for your new event.
           </SheetDescription>
         </SheetHeader>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-4">
+          <div>
+            <Label htmlFor="title">Title</Label>
+            <Controller
+              name="title"
+              control={control}
+              render={({ field }) => <Input {...field} />}
+            />
+            {errors.title && (
+              <p className="text-red-500 text-sm">{errors.title.message}</p>
+            )}
+          </div>
+
+          <div>
+            <Label htmlFor="description">Description</Label>
+            <Controller
+              name="description"
+              control={control}
+              render={({ field }) => <Textarea {...field} />}
+            />
+            {errors.description && (
+              <p className="text-red-500 text-sm">
+                {errors.description.message}
+              </p>
+            )}
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="startDate">Start Date</Label>
+              <Controller
+                name="startDate"
+                control={control}
+                render={({ field }) => <Input type="date" {...field} />}
+              />
+              {errors.startDate && (
+                <p className="text-red-500 text-sm">
+                  {errors.startDate.message}
+                </p>
+              )}
+            </div>
+            <div>
+              <Label htmlFor="endDate">End Date</Label>
+              <Controller
+                name="endDate"
+                control={control}
+                render={({ field }) => <Input type="date" {...field} />}
+              />
+              {errors.endDate && (
+                <p className="text-red-500 text-sm">{errors.endDate.message}</p>
+              )}
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="startTime">Start Time</Label>
+              <Controller
+                name="startTime"
+                control={control}
+                render={({ field }) => <Input type="time" {...field} />}
+              />
+              {errors.startTime && (
+                <p className="text-red-500 text-sm">
+                  {errors.startTime.message}
+                </p>
+              )}
+            </div>
+            <div>
+              <Label htmlFor="endTime">End Time</Label>
+              <Controller
+                name="endTime"
+                control={control}
+                render={({ field }) => <Input type="time" {...field} />}
+              />
+              {errors.endTime && (
+                <p className="text-red-500 text-sm">{errors.endTime.message}</p>
+              )}
+            </div>
+          </div>
+
+          <div>
+            <Controller
+              name="category"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select Category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {categories.map((category) => (
+                      <SelectItem key={category._id} value={category._id}>
+                        {category.title}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="thumbnail">Thumbnail URL</Label>
+            <Controller
+              name="thumbnail"
+              control={control}
+              render={({ field }) => <Input {...field} />}
+            />
+            {errors.thumbnail && (
+              <p className="text-red-500 text-sm">{errors.thumbnail.message}</p>
+            )}
+          </div>
+          <div className="flex">
+            <div>
+              <Label htmlFor="lat">Lat</Label>
+              <Controller
+                name="lat"
+                control={control}
+                render={({ field }) => <Input type="number" {...field} />}
+              />
+            </div>
+            <div>
+              <Label htmlFor="long">Long</Label>
+              <Controller
+                name="long"
+                control={control}
+                render={({ field }) => <Input type="number" {...field} />}
+              />
+            </div>
+          </div>
+
+          <div>
+            <Label htmlFor="address">Address</Label>
+            <Controller
+              name="address"
+              control={control}
+              render={({ field }) => <Input type="text" {...field} />}
+            />
+          </div>
+
+          <Button type="submit">
+            {isSubmitting ? "Loading.." : "Add Event"}
+          </Button>
+        </form>
       </SheetContent>
     </Sheet>
-    
-    )
+  );
 }
-
-
