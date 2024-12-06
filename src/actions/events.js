@@ -13,10 +13,14 @@ export const addEvents= async (obj) => {
   }
 };
 
-export const getEvents = async () => {
-  let events = await fetch(`${process.env.BASE_URL}api/events`);
+
+export const getEvents = async (category) => {
+  console.log("category in action=>", category);
+  let events = await fetch(
+    `${process.env.BASE_URL}api/events?category=${category ? category : ""}`
+  );
   events = await events.json();
-  console.log("Category Fetched successfully");
+  console.log("Events Fetched successfully");
   return events;
-  revalidatePath("/admin/events");
+  revalidatePath("/admin/categories");
 };

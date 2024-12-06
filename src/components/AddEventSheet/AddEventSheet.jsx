@@ -250,7 +250,7 @@ export default function AddEventForm({ session, categories }) {
           </div>
 
           <Button type="submit">
-            {isSubmitting ? "Loading.." : "Add Event"}
+            {isSubmitting ? "Loading.." : "Upload Event"}
           </Button>
         </form>
       </SheetContent>

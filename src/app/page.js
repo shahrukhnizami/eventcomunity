@@ -7,11 +7,13 @@ import { getEvents } from "@/actions/events";
 import UpcomingEvents from "@/components/UpcomingEvents/UpcomingEvents";
 import { getCategories } from "@/actions/categories";
 
-export default async function Home(searchParams ) {
-  // console.log("searchparams=>", searchParams);
+export default async function Home({searchParams} ) {
+  console.log("searchparams=>", searchParams);
   const { category } = searchParams;
   const session = await auth();
   const { events } = await getEvents(category);
+  console.log("catgori id" , category);
+  
   const { categories } = await getCategories();
   return (
 
