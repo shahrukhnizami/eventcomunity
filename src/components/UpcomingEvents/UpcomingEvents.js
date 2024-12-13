@@ -107,7 +107,7 @@ export default function UpcomingEvents({
                   />
                   <span className="text-sm">{event.createdBy.fullname}</span>
                 </div>
-                <Link href={`/event/${event._id}`}>
+                <Link href={`/events/${event._id}`}>
                   <Button>View Details</Button>
                 </Link>
               </CardFooter>
